@@ -4,28 +4,28 @@ mysql> create table employe11(empid int primary key,name varchar(30),age int,gen
 mysql> insert into employee11 values(100,'tam',21,'male','IT',22000,'A');
 Query OK, 1 row affected (0.01 sec)
 
-mysql> insert into employee11 values(101,'ravi',23,'male','HR',20000,'A+');
+mysql> insert into employee11 values(101,'ravi',23,'male','IT',20000,'A+');
 Query OK, 1 row affected (0.01 sec)
 
-mysql> insert into employee11 values(102,'sam',20,'male','HR',22000,'B');
+mysql> insert into employee11 values(102,'sam',20,'male','HR',22000,'B+');
 Query OK, 1 row affected (0.01 sec)
 
-mysql> insert into employee11 values(110,'raj',21,'male','IT',20000,'B+');
+mysql> insert into employee11 values(110,'raj',21,'male','HR',20000,'B+');
 Query OK, 1 row affected (0.01 sec)
 
 mysql> insert into employee11 values(120,'anuj',22,'male','HR',22000,'A');
 Query OK, 1 row affected (0.01 sec)
 
 mysql> select * from employee11;
-+-------+------+------+--------+------+-------+-------+
-| empid | name | age  | gender | dept | basic | grade |
-+-------+------+------+--------+------+-------+-------+
-|   100 | tam  |   23 | male   | HR   | 22000 | A+    |
-|   101 | ravi |   21 | male   | IT   | 20000 | A     |
-|   102 | sam  |   20 | male   | HR   | 22000 | B     |
-|   110 | raj  |   21 | male   | IT   | 20000 | B+    |
-|   120 | anuj |   22 | male   | HR   | 22000 | A     |
-+-------+------+------+--------+------+-------+-------+
++-------+------+------+--------+------+-------+--------+
+| empid | name | age  | gender | dept | basic | grade  |
++-------+------+------+--------+------+-------+--------+
+|   100 | tam  |   23 | male   | IT   | 22000 | A+     |
+|   101 | ravi |   21 | male   | IT   | 20000 | A      |
+|   102 | sam  |   20 | male   | HR   | 22000 | B+     |
+|   110 | raj  |   21 | male   | HR   | 20000 | B+     |
+|   120 | anuj |   22 | male   | HR   | 22000 | A      |
++-------+------+------+--------+------+-------+--------+
 5 rows in set (0.00 sec)
 
 Employee Search
