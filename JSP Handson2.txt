@@ -1,0 +1,361 @@
+Problem-1
+mysql> create table employe11(empid int primary key,name varchar(30),age int,gender varchar(10),dept varchar(20),basic int,grade varchar(10));
+
+mysql> insert into employee11 values(100,'tam',21,'male','IT',22000,'A');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee11 values(101,'ravi',23,'male','HR',20000,'A+');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee11 values(102,'sam',20,'male','HR',22000,'B');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee11 values(110,'raj',21,'male','IT',20000,'B+');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee11 values(120,'anuj',22,'male','HR',22000,'A');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employee11;
++-------+------+------+--------+------+-------+-------+
+| empid | name | age  | gender | dept | basic | grade |
++-------+------+------+--------+------+-------+-------+
+|   100 | tam  |   23 | male   | HR   | 22000 | A+    |
+|   101 | ravi |   21 | male   | IT   | 20000 | A     |
+|   102 | sam  |   20 | male   | HR   | 22000 | B     |
+|   110 | raj  |   21 | male   | IT   | 20000 | B+    |
+|   120 | anuj |   22 | male   | HR   | 22000 | A     |
++-------+------+------+--------+------+-------+-------+
+5 rows in set (0.00 sec)
+
+Employee Search
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="http://localhost:8080/j2eeproject/HServlet" method="post">
+
+Employee ID : <input type="number" name="id">
+<input type="submit">
+</form>
+</body>
+</html>
+
+Connection Servlet
+
+package com.pack;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class JDBCServlet
+ */
+@WebServlet("/JDBCServlet")
+public class JDBCServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public JDBCServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
+		
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		response.setContentType("text/html"); 
+        PrintWriter pw=response.getWriter();
+        int id=Integer.parseInt(request.getParameter("name"));
+Connection con=null;
+        try {
+        	Class.forName("com.mysql.jdbc.Driver");
+        	con=DriverManager.getConnection("jdbc:mysql://localhost:3306/jdbc","root","root");
+  		Statement st=con.createStatement();
+        		ResultSet rs=st.executeQuery("select * from employee11 where empid=id ");
+        		List<Employee> l=new ArrayList<>();
+        		while(rs.next()) {
+        			Employee emp=new Employee();
+        			emp.setEmpid(rs.getInt(1));
+        			emp.setName(rs.getString(2));
+        			emp.setAge(rs.getInt(3));
+        			emp.setGender(rs.getString(4));
+        			emp.setDept(rs.getString(5));
+        			emp.setBasic(rs.getInt(6));
+        	                                     emp.setGrade(rs.getString(7));
+        			
+                	l.add(emp);
+        			
+        		}
+        		if(l==null)
+
+            		{
+            			RequestDispatcher rd1=request.getRequestDispatcher("/error.jsp");
+                		rd1.forward(request, response);
+            			}
+        		else{
+        			request.setAttribute("empList", l);
+        		
+        		RequestDispatcher rd=request.getRequestDispatcher("/success.jsp");
+        		rd.forward(request, response);
+        	}
+        		}
+        
+        catch(Exception e) {
+        	System.out.println(e);
+        }
+        finally {
+        	if(con!=null)
+        		try {
+        			con.close();
+        		}
+        	catch(SQLException e) {
+        		e.printStackTrace();
+        	}
+        }
+        
+	}
+}
+
+Employee.java
+package com.pack;
+
+public class Employee {
+   int empid;
+   String name;
+   int age;
+   String gender;
+   String dept;
+   int basic;
+   String grade;
+public int getEmpid() {
+	return empid;
+}
+public void setEmpid(int empid) {
+	this.empid = empid;
+}
+public String getName() {
+	return name;
+}
+public void setName(String name) {
+	this.name = name;
+}
+public int getAge() {
+	return age;
+}
+public void setAge(int age) {
+	this.age = age;
+}
+public String getGender() {
+	return gender;
+}
+public void setGender(String gender) {
+	this.gender = gender;
+}
+public String getDept() {
+	return dept;
+}
+public void setDept(String dept) {
+	this.dept = dept;
+}
+public int getBasic() {
+	return basic;
+}
+public void setBasic(int basic) {
+	this.basic = basic;
+}
+public String getGrade() {
+	return grade;
+}
+public void setGrade(String grade) {
+	this.grade = grade;
+}
+public Employee(int empid, String name, int age, String gender, String dept, int basic, String grade) {
+	super();
+	this.empid = empid;
+	this.name = name;
+	this.age = age;
+	this.gender = gender;
+	this.dept = dept;
+	this.basic = basic;
+	this.grade = grade;
+}
+public Employee() {
+	super();
+	// TODO Auto-generated constructor stub
+}
+   
+   
+}
+
+success.jsp
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" errorPage="error.jsp"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>Employee Details</h1>
+<table border="1">
+<tr>
+<th>Employee Id</th>
+<th>Employee Name</th>
+<th>Age</th>
+<th>Gender</th>
+<th>Department</th>
+<th>Basic</th>
+<th>Grade</th>
+</tr>
+<c:forEach items="${empList}" var="empl">
+<tr>
+<td>${empl.empid }</td>
+<td>${empl.name }</td>
+<td>${empl.age}</td>
+ <td>${empl.gender }</td> 
+<td>${empl.dept }</td>
+<td>${empl.basic }</td>
+<td>${empl.grade }</td>
+</tr>
+</c:forEach>
+</table>
+</body>
+</html>
+
+error.jsp
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>INVALID ID </h1>
+</body>
+</html>
+--------------------------------------------------------
+Problem-2
+
+index.jsp
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="http://localhost:8080/j2eeproject/result.jsp">
+Name: <input type="text" name="name">
+salary: <input type="text" name="sal">
+Code:<input type="number" name="code">
+<input type="submit">
+</form>
+</body>
+</html>
+
+User class
+
+package com.pack;
+
+import java.io.Serializable;
+
+public class User implements Serializable {
+
+    private String name;
+
+    private int sal;
+    private int code;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getSal() {
+		return sal;
+	}
+	public void setSal(int sal) {
+		this.sal = sal;
+	}
+	public int getCode() {
+		return code;
+	}
+	public void setCode(int code) {
+		this.code = code;
+	}
+}
+
+result.jsp
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+
+    pageEncoding="ISO-8859-1"%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<title>Insert title here</title>
+
+</head>
+
+<body>
+
+<jsp:useBean id="hello" class="com.pack.User">
+
+   <jsp:setProperty name="hello" property="*"/>
+
+</jsp:useBean>
+
+Employee Name: <jsp:getProperty name="hello" property="name"/><br/>
+Salary : <jsp:getProperty name="hello" property="sal"/><br/>
+Employee Code : <jsp:getProperty name="hello" property="code"/>
+
+<br/>
+<br/>
+</body>
+</html>
+----------------------------------------------------------------
+
+
